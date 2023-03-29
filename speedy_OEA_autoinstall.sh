@@ -39,7 +39,7 @@ echo "$BANDERA_IDIOMA es el idioma usado en los mensajes salida del script"
 
 # Definimos comprobacion version python
 if [ "$PYTHON_MAJOR_VERSION" = "2" ]; then
-    echo -e "${RED}⛔️ Lo siento, este script no es compatible con Python 2, $TEXTO_SALIDA.${RESET}"
+    echo -e "${RED}⛔️ Lo siento, Speedy OEA Autoinstall no es compatible con Python 2, $TEXTO_SALIDA.${RESET}"
     $TIEMPO_ESPERA
     exit 1
 fi
