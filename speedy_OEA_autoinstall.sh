@@ -10,6 +10,10 @@ YELLOW="\e[33m"
 RED="\e[31m"
 RESET="\e[0m"
 
+#Definimos variables de comprobacion version python en receptor
+PYTHON_VERSION=$(python --version 2>&1 | awk '{print $2}')
+PYTHON_MAJOR_VERSION=$(echo "$PYTHON_VERSION" | cut -d'.' -f1)
+
 #Definimos tiempo espera
 TIEMPO_ESPERA="sleep 5"
 
@@ -30,6 +34,15 @@ echo -e "${GREEN}***************************************************************
 echo
 
 echo "$BANDERA_IDIOMA es el idioma usado en los mensajes salida del script"
+
+#!/bin/bash
+
+# Definimos comprobacion version python
+if [ "$PYTHON_MAJOR_VERSION" = "2" ]; then
+    echo -e "${RED}⛔️ Lo siento, este script no es compatible con Python 2, $TEXTO_SALIDA.${RESET}"
+    $TIEMPO_ESPERA
+    exit 1
+fi
 
 # Definimos nombre de imagen instalada en receptor enigma2
 if [ -f /etc/image-version  ]; then
