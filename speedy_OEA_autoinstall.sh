@@ -22,10 +22,10 @@ TEXTO_SALIDA="se procede a cerrar la ejecucion de speedy OEA autoinstall"
 # Borramos terminal y se ejecuta cabezera
 clear
 echo -e "${GREEN}******************************************************************************${RESET}"
-echo -e "${GREEN}*                             Speedy OEA Autoinstall                         *${RESET}"
-echo -e "${GREEN}*      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA          *${RESET}"
-echo -e "${GREEN}*                            VERSION 1.2                                    *${RESET}"
-echo -e "${GREEN}*                           jungle-team.com                                  *${RESET}"
+echo -e "${GREEN}*                         Speedy OEA Autoinstall                              *${RESET}"
+echo -e "${GREEN}*      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA           *${RESET}"
+echo -e "${GREEN}*                            VERSION 1.2                                      *${RESET}"
+echo -e "${GREEN}*                           jungle-team.com                                   *${RESET}"
 echo -e "${GREEN}******************************************************************************${RESET}"
 echo
 
