@@ -6,7 +6,6 @@
 #                    version 1.2                        #
 ######################################################### 
 
-
 #Definimos paquetes mas usuales de archivos a instalar
 PAQUETE_EPGIMPORT="enigma2-plugin-extensions-epgimport"
 PAQUETE_JUNGLESCRIPT="enigma2-plugin-extensions-junglescript"
@@ -29,6 +28,7 @@ INSTALACION_FORZADA="opkg install --force-reinstall"
 ESTATUS_PAQUETE="opkg status"
 BORRAR_PAQUETE="opkg remove"
 FORZAR_BORRAR_PAQUETE="opkg remove --force-depends"
+FORZAR_ESCRITURA="opkg install --force-overwrite"
 
 #Definimos colores para mensajes
 GREEN="\e[32m"
@@ -605,6 +605,7 @@ function install_packages() {
  else
      Modulo_package_gestion "enigma2-plugin-softcams-cccam-mipsel-es" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 spain" "$INSTALACION_FORZADA" "5" "extra_comando" "COMANDO_CCCAM"
  fi
+ Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5"
  cambiar_password 
  init 3
  mensaje "Terminada la ejecucion de Speedy OEA Autoinstall, ahora se volvera al menu principal${GREEN}"
@@ -627,8 +628,11 @@ function remove() {
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_JUNGLEBOT)" ]; then
         echo "Desistalando Jungleblot"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLEBOT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Junglebot Desistalado"
     fi
-    if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY)" ]; then
-        echo "Desistalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+    if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_ARM)" ]; then
+        echo "Desistalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_ARM >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+    fi
+    if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL)" ]; then
+        echo "Desistalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_OSCAMCONCLAVE)" ]; then
         echo "Desistalando Oscam Conclave"; echo; $BORRAR_PAQUETE $PAQUETE_OSCAMCONCLAVE >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 OscamConclave Desistalado"
