@@ -35,7 +35,7 @@ $ wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team
 
 Una vez ejecutado realizara check y si la imagen es compatible, accederemos al menu de instalación de paquetes de una manera guiada.
 
-[![speedy video](https://jungle-team.com/wp-content/uploads/2023/03/video.png)](https://videos.files.wordpress.com/aWP4K8Mo/speedy-oea.mp4)
+[![speedy video](https://jungle-team.com/wp-content/uploads/2023/03/video.png)](https://videos.files.wordpress.com/bsboDDpD/speedy_oea_video.mp4)
 
 ## Inicio rápido
 
