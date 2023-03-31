@@ -1,6 +1,6 @@
 ![logo speedy](https://jungle-team.com/wp-content/uploads/2023/03/speedy_logo.png)
 
-[![speedy version](https://jungle-team.com/wp-content/uploads/2023/03/speedy_relases.png)](https://jungle-team.com/) [   ![Licencia speedy](https://jungle-team.com/wp-content/uploads/2023/03/licence.png)
+[![speedy version](https://jungle-team.com/wp-content/uploads/2023/03/speedy_relases.png)](https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/) [   ![Licencia speedy](https://jungle-team.com/wp-content/uploads/2023/03/licence.png)
 ](https://github.com/jungla-team/Speedy-OEA-autoinstall/blob/main/LICENSE) [![chat telegram](https://jungle-team.com/wp-content/uploads/2023/03/telegram.png)
 ](https://t.me/joinchat/R_MzlCWf4Kahgb5G) [![donar a jungle](https://jungle-team.com/wp-content/uploads/2023/03/donate.png)
 ](https://paypal.me/jungleteam)
@@ -39,7 +39,7 @@ Una vez ejecutado realizara check y si la imagen es compatible, accederemos al m
 
 ## Inicio rápido
 
-Tienes un manual completo de uso [Guia Speedy OEA Autoinstall](https://jungle-team.com) que explica mas detalladamente las opciones disponibles, aunque como se ha mencionado es simplemente seguir las instrucciones que va solicitando Speedy OEA Autoinstall.
+Tienes un manual completo de uso [Guia Speedy OEA Autoinstall](https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/) que explica mas detalladamente las opciones disponibles, aunque como se ha mencionado es simplemente seguir las instrucciones que va solicitando Speedy OEA Autoinstall.
 
 
 ## Obteniendo ayuda
@@ -47,7 +47,7 @@ Tienes un manual completo de uso [Guia Speedy OEA Autoinstall](https://jungle-te
 Si los recursos mencionados anteriormente no responden a sus preguntas o dudas,  o te ha resultado muy complicado, tienes varias formas de obtener ayuda.
 
 1.  Tenemos una comunidad donde se intenta que se ayudan unos a otros en nuestro [grupo de Telegram](https://t.me/joinchat/R_MzlCWf4Kahgb5G) . ¡Únete a nosotros! Hacer una pregunta aquí suele ser la forma más rápida de obtener respuesta y poder hablar directamente con los desarrolladores.
-2.  Tambien puedes leer con detenimiento la [Guia avanzada de Speedy OEA Autoinstall](https://jungle-team.com/) .
+2.  Tambien puedes leer con detenimiento la [Guia avanzada de Speedy OEA Autoinstall]([https://jungle-team.com/](https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/)https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/) .
 
 ## contribuir
 
