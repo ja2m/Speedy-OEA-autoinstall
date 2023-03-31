@@ -31,7 +31,7 @@ En caso de usar Mac OS la terminal por defecto ya es compatible perfectamente co
 
 Para realizar la ejecucion de  `Speedy OEA Autoinstall` simplemente ejecute este comando en la terminal una vez hemos accedido a traves de ella a nuestro receptor enigma2
 
-$ wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/speedy_OEA_autoinstall.sh; bash speedy_OEA_autoinstall.sh; rm -r speedy_OEA_autoinstall.sh
+$ `wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/speedy_OEA_autoinstall.sh; bash speedy_OEA_autoinstall.sh; rm -r speedy_OEA_autoinstall.sh`
 
 Una vez ejecutado realizara check y si la imagen es compatible, accederemos al menu de instalación de paquetes de una manera guiada.
 
