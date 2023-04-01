@@ -20,6 +20,7 @@ Speedy OEA Autoinstall se ejecuta bajo consola terminal proporcionando una inter
 Speedy OEA Autoinstall esta desarrollado bajo  `shell` y puede ser utilizado para instalacion de paquetes en imagenes que usen `python 3.x` , en otras imagenes no es compatible, imagenes en las que puede ser usado, proximamente se añadira compatibilidad con mas imagenes:
 
  - OpenATV 7.2
+ - Egami 10.3
 
 Por el tipo de interfaz de iconos y barras de progreso que se usa, se recomienda para poder disfrutar de toda la grafica, la terminal de windows nueva:
 
