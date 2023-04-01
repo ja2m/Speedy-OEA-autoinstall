@@ -3,7 +3,7 @@
 ###################  Jungle-team   ######################
 #                  jungle-team.es  ######################
 #            speedy OEA Autoinstalacion OpenaTV         #
-#                    version 1.2                        #
+#                    version 1.3                        #
 ######################################################### 
 
 #Definimos paquetes mas usuales de archivos a instalar
@@ -19,8 +19,9 @@ PAQUETE_GHOSTREAMY="enigma2-plugin-extensions-ghostreamy"
 
 #Defnimos comandos extra instalacion
 COMANDO_FOOTONSAT="wget -q '--no-check-certificate' https://raw.githubusercontent.com/ziko-ZR1/FootOnsat/main/Download/install.sh && sh install.sh && rm install.sh"
-COMANDO_CCCAM="wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/files_extra/insertar_linea.py;python insertar_linea.py;rm insertar_linea.py"
+COMANDO_CCCAM="suerte_cccam"
 COMANDO_JUNGLESCRIPT="wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/files_extra/op_junglescript.sh && sh op_junglescript.sh && rm op_junglescript.sh"
+COMANDO_JUNGLEBOT="cambiar_parametros_junglebot"
 
 #Definimos metodos instalacion
 INSTALACION_NORMAL="opkg install"
@@ -41,6 +42,7 @@ GREEN_BOLD="\e[1;32m"
 YELLOW_BOLD="\e[1;33m"
 BLUE_BOLD="\e[1;34m"
 
+#Definimos url del respositorio jungle-team
 REPOSITORIO_JUNGLE="http://tropical.jungle-team.online/script/jungle-feed.conf"
 
 #Definimos la arquitectura de nuestro receptor
@@ -218,15 +220,6 @@ function status_server_jungleteam() {
 
 }
 
-#Funcion para parchear el bootlogo de inicio de openatv
-function install_bootlogo() {
-    wget http://tropical.jungle-team.online/auto_install_images/bootlogo.tar.gz -O /tmp/bootlogo.tar.gz >>$SPEEDY_LOG 2>&1
-    tar -xzf /tmp/bootlogo.tar.gz -C /usr/share/ >>$SPEEDY_LOG 2>&1
-    tar -xzf /tmp/bootlogo.tar.gz -C /boot/ >>$SPEEDY_LOG 2>&1
-    rm -R /tmp/bootlogo.tar.gz >>$SPEEDY_LOG 2>&1
-    
-}
-
 #Modulo base para instalaciones paquetes
 function Modulo_package_gestion() {
     echo -e "${BLUE_BOLD}$2${RESET}"
@@ -266,7 +259,7 @@ function MENU_SPEEDY_OEA() {
                      .::::::::::::::::-:          
                    :::::::::::::::::::::-.                  ¡Ándale, ándale, ándale yiiija! Rapidamente tu imagen configurada
                .::-::::::::::::::::::::::-.       
-            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.2
+            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.3
           :-::::::::::::::::::::::::::::::::      
         :-:::::::::::::::::::::::::::::::::-                Imagen Compatible: OpenATV
        -::::::::::::::::::::::::::::::::::::-     
@@ -278,7 +271,7 @@ function MENU_SPEEDY_OEA() {
   :-:::::=+++++#@@@%#++=.==+++++++=::::::::::-    
    :=----+++++*+*###++++++*+++++++++-:----::::.             Licencia: General Public License
     .--::-+++++*+++++*%@*++++++++++++++++++-::-   
-      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 29-03-2023
+      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 01-04-2023
          .:-=++++%@@@@*+++++++++++=-:.....:-::::-.
              :****###+++++++++++++=:....:-:::::::-
   ..       :*%%%%%##****+==+==--:--=----:::::::::.
@@ -327,11 +320,15 @@ while :
 do
 	echo -e " (1) Instalar ${YELLOW_BOLD}(Iniciar la instalacion de utilidades)${RESET}"
 	echo
-	echo -e " (2) Desistalar ${YELLOW_BOLD}(Borrar todos los archivos instalados)${RESET}"
+	echo -e " (2) desinstalar ${YELLOW_BOLD}(Borrar todos los archivos instalados)${RESET}"
 	echo
 	echo -e " (3) Ayuda ${YELLOW_BOLD}(Menu de ayuda y recomendaciones)${RESET}"
 	echo
 	echo -e " (4) Borrar log ${YELLOW_BOLD}(Elimina el log ubicado en /var/log)${RESET}"
+	echo
+	echo -e " (5) Realizar Backup ${YELLOW_BOLD}(Realiza backup de los archivos mas usuales en /media/hdd)${RESET}"
+	echo
+	echo -e " (6) Restaurar Backup ${YELLOW_BOLD}(Restaurar Backup)${RESET}"
 	echo
 	echo
     echo " (s) Salir"
@@ -343,6 +340,8 @@ do
 		2) clear && remove;;
 		3) clear && ayuda;;
 		4) clear && borrar_log;;
+		5) clear && backup_jungle;;
+		6) clear && restaurar_backup;;
 		s) clear && echo "❤️  Gracias por haber usado Speedy OEA Autoinstalacion" && echo && exit;;
 		*) echo && echo -e " ${RED_BOLD}¡¡¡¡¡¡¡$SpeedyOEA es un valor incorrecto, intentalo de nuevo!!!!!!${RESET}" && echo;
 	esac
@@ -536,6 +535,170 @@ function hora() {
     done
 }
 
+#Define realizar backup de archivos del receptor
+function backup_jungle() {
+    echo
+    echo -e "${YELLOW_BOLD}----------------------------------------------------------------------------------------${RESET}"
+    echo -e "${YELLOW}ℹ️  Opcion realizar backup de archivos mas usuales:${RESET}"
+    echo -e "${YELLOW}ingrese el valor numerico de los archivos que desee realizar${RESET}"
+    echo -e "${YELLOW}el backup, si quiere seleccionar mas de un archivo separa${RESET}"
+    echo -e "${YELLOW}con coma, ejemplo: 1,5,8 en cambio si desea realizar la${RESET}"
+    echo -e "${YELLOW}copia de todos los archivos ingrese all${RESET}"
+    echo -e "${YELLOW_BOLD}----------------------------------------------------------------------------------------${RESET}"
+    echo
+    archivos_etc=$(find /etc -type f \( -iname "oscam.*" -o -iname "CCcam.*" -o -iname "ncam.*" -o -iname "ghostreamy.*" -o -iname "epgimport.conf" -o -iname "CertResource.json" -o -iname "key.pem" -o -iname "simplecert.log" -o -iname "SSLUser.json" \) 2>&1 || true)
+    archivos_usr_bin=$(find /usr/bin -type f \( -iname "enigma2_pre_start.conf" -o -iname "amigos.cfg" -o -iname "parametros.py" \) 2>&1 || true)
+
+    opciones=()
+    for archivo in $archivos_etc $archivos_usr_bin; do
+        if [ -n "$archivo" ]; then
+            opciones+=("$archivo")
+        fi
+    done
+    seleccionados=()
+    while true; do
+    echo -e "${BLUE_BOLD}🛠  Menu Seleccionar Archivos para Backup:${RESET}"
+        echo
+        for ((i=0; i<${#opciones[@]}; i++)); do
+            archivo="${opciones[$i]}"
+            if [[ " ${seleccionados[@]} " =~ " ${archivo} " ]]; then
+                echo -e "👍 $((i+1)). $archivo"
+            else
+                echo "$((i+1)). $archivo"
+            fi
+        done
+        echo
+        read -p "$(echo -e "${BLUE}💡 Ingrese los números de archivo que desea seleccionar (o 'all' para seleccionar todos, o 's' para salir): ${RESET}")" seleccion
+        echo
+        if [ "$seleccion" = "s" ]; then
+            MENU_SPEEDY_OEA
+        fi
+        if [ "$seleccion" = "all" ]; then
+            seleccionados=("${opciones[@]}")
+            break
+        fi
+        IFS=',' read -ra opciones_seleccionadas <<< "$seleccion"
+        for opcion in "${opciones_seleccionadas[@]}"; do
+            if [ -n "${opciones[$((opcion-1))]}" ]; then
+                seleccionados+=("${opciones[$((opcion-1))]}")
+            else
+                echo "Opción inválida: $opcion"
+            fi
+        done
+    	read -p "$(echo -e "${BLUE}💡 Desea seleccionar otro archivo? (s/n): ${RESET}")" continuar
+    	if [ "$continuar" = "n" ]; then
+        	break
+    	fi
+	done
+
+    printf "%s\n" "${seleccionados[@]}" > /tmp/backup_jungle.txt
+    echo "Archivos seleccionados para backup guardados en /tmp/backup_jungle.txt"
+    archivos=()
+    while IFS= read -r archivo || [[ -n "$archivo" ]]; do
+        archivos+=("$archivo")
+    done < "/tmp/backup_jungle.txt"
+
+	if [ ! -d "/media/hdd/backup_jungle" ]; then
+    	mkdir -p "/media/hdd/backup_jungle"
+	fi
+	fecha=$(date +%Y%m%d%H%M%S)
+	nombre_zip="/media/hdd/backup_jungle/backup_jungle_$fecha.zip"
+
+	if [ ${#archivos[@]} -gt 0 ]; then
+    	zip -r "$nombre_zip" "${archivos[@]}"
+    	echo
+    	echo -e "${RED}⚠️ Backup creando en  $nombre_zip${RESET}"
+	else
+    	echo "No se encontraron archivos seleccionados"
+	fi
+	sleep 5
+    MENU_SPEEDY_OEA
+}
+
+# Define restaurar backup
+function restaurar_backup() {
+    echo
+    echo -e "${YELLOW_BOLD}----------------------------------------------------------------------------------------${RESET}"
+    echo -e "${YELLOW}ℹ️  Opcion de Restaurar Backup:${RESET}"
+    echo -e "${YELLOW}ingrese el valor numerico del backup que desee restaurar${RESET}"
+    echo -e "${YELLOW}a continuacion pulse intro y se procedera a la restauracion${RESET}"
+    echo -e "${YELLOW}del backup seleccionado${RESET}"
+    echo -e "${RED}Restaurar sobreescribe archivos si ya estuvieran en el receptor${RESET}"
+    echo -e "${YELLOW_BOLD}----------------------------------------------------------------------------------------${RESET}"
+    echo
+    DIRECTORIO_BACKUP_JUNGLE=/media/hdd/backup_jungle
+    ARCHIVOS_BACKUP_JUNGLE=("$DIRECTORIO_BACKUP_JUNGLE"/*.zip)
+    if [ ${#ARCHIVOS_BACKUP_JUNGLE[@]} -eq 0 ]; then
+        echo "No se encontraron archivos zip en el directorio especificado."
+        MENU_SPEEDY_OEA
+    fi
+    echo -e "${BLUE_BOLD}🛠  Menu Seleccionar backup a restaurar:${RESET}"
+    echo
+    for ((i=0; i<${#ARCHIVOS_BACKUP_JUNGLE[@]}; i++)); do
+        echo "$((i+1)). ${ARCHIVOS_BACKUP_JUNGLE[$i]}"
+    done
+	echo
+    read -p "$(echo -e "${BLUE}💡 Ingrese el valor numero del backup a restaurar  o 's' para salir): ${RESET}")" SELECCION
+    echo
+    while ! [[ "$SELECCION" =~ ^[0-9]+$ ]] || ((SELECCION < 1 || SELECCION > ${#ARCHIVOS_BACKUP_JUNGLE[@]})); do
+        if [ "$SELECCION" = "s" ]; then
+            MENU_SPEEDY_OEA
+        fi
+        echo -e "${RED_BOLD}⚠️  La selección no es válida. Seleccione un número entre 1 y ${#ARCHIVOS_BACKUP_JUNGLE[@]} o s para salir.${RESET}"
+        echo
+    	read -p "$(echo -e "${BLUE}💡 Ingrese el valor numero del backup a restaurar  o 's' para salir): ${RESET}")" SELECCION
+    done
+
+    BACKUP_SELECCIONADO=${ARCHIVOS_BACKUP_JUNGLE[$((SELECCION-1))]}
+    unzip -o "$BACKUP_SELECCIONADO" -d /
+	echo
+    echo -e "${RED_BOLD}⚠️ El backup $BACKUP_SELECCIONADO se ha restaurado${RESET}"
+    sleep 5
+    MENU_SPEEDY_OEA
+}
+
+#Se define introducir lineas cccam
+function suerte_cccam() {
+	echo
+    echo -e "${BLUE}💡 Introduzca una o varias lineas, ejem. C: rioga.net 14200 tus muertos, cada vez que introduzca linea pulse intro, para salir escriba suerte: ${RESET}"
+    echo
+    while read linea
+    do
+        if [ "$linea" = "suerte" ]; then
+            break  
+        fi
+        echo "$linea" >> /etc/CCcam.cfg
+        echo "" >> /etc/CCcam.cfg
+    done
+    echo
+    echo -e "${RED_BOLD}⚠️ Se ha actualizado el fichero CCcam.cfg, que tengas mucha suerte 🍀🤞🍀${RESET}"
+    sleep 7    
+}
+
+function cambiar_parametros_junglebot() {
+    while true; do
+    	echo -e "${BLUE}💡  Deseas introducir los valores de TOKEN y CHAT_ID para junglebot (s/n) ${RESET}"
+        read respuesta
+        if [[ $respuesta =~ ^[Ss]$ ]]; then
+            echo "💬 Introduce el nuevo valor para el token: "
+            echo
+            read -p "🔑️ " nuevo_token
+            sed -i "s/BOT_TOKEN=.*/BOT_TOKEN=$nuevo_token/g" /usr/bin/junglebot/parametros.py
+
+            echo "💬 Introduce el nuevo valor para el chat ID: "
+            echo
+            read -p "🔑️️️  " nuevo_chat_id
+            sed -i "s/CHAT_ID=.*/CHAT_ID=$nuevo_chat_id/g" /usr/bin/junglebot/parametros.py
+        elif [[ $respuesta =~ ^[Nn]$ ]]; then
+            break
+        fi
+     	echo -e "${YELLOW}💡  Se vuelve a repetir por si te equivocaste en los valores, si no es el caso introduzca n para finalizar ${RESET}"
+    done
+	echo
+	echo -e "${GREEN}✅ Valores de TOKEN y CHAT_ID actualizados correctamente${RESET}"
+
+}
+
 function logo(){
 	clear
 	echo -e "\e[32m${VERDE} ******************************************************************************\e[0m"
@@ -548,7 +711,7 @@ function logo(){
 	echo -e "\e[32m${VERDE} *        																	 *\e[0m"
 	echo -e "\e[32m${VERDE} *                          SPEEDY OEA-OpenATV            					 *\e[0m"
 	echo -e "\e[32m${VERDE} *      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA          *\e[0m"
-	echo -e "\e[32m${VERDE} *                            VERSION 1.2                                     *\e[0m"
+	echo -e "\e[32m${VERDE} *                            VERSION 1.3                                     *\e[0m"
 	echo -e "\e[32m${VERDE} *                           jungle-team.com                                  *\e[0m"
 	echo -e "\e[32m${VERDE} ******************************************************************************\e[0m"
 }
@@ -580,7 +743,7 @@ function install_packages() {
  else
      Modulo_package_gestion "$PAQUETE_GHOSTREAMY_MIPSEL" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10"
  fi
- Modulo_package_gestion "$PAQUETE_JUNGLEBOT" "🧐  Opciones Solicitud de instalacion Junglebot" "$INSTALACION_FORZADA" "45"
+ Modulo_package_gestion "$PAQUETE_JUNGLEBOT" "🧐  Opciones Solicitud de instalacion Junglebot" "$INSTALACION_FORZADA" "45" "extra_comando" "$COMANDO_JUNGLEBOT"
  Modulo_package_gestion "$PAQUETE_TDTCHANNLES" "🧐  Opciones Solicitud de instalacion TdtChannels" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "$PAQUETE_JUNGLESCRIPT" "🧐  Opciones Solicitud de instalacion JungleScript" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_JUNGLESCRIPT"
  if [ "$es_arm" -gt 0 ];
@@ -616,83 +779,83 @@ function install_packages() {
 }
 
 function remove() {
-    echo -e "${BLUE}💡  Se va a proceder a desistalar todos los paquetes instalados${RESET}"
+    echo -e "${BLUE}💡  Se va a proceder a desinstalar todos los paquetes instalados${RESET}"
     temporizador
     echo
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_EPGIMPORT)" ]; then
-        echo "Desistalando Epgimport"; echo; $BORRAR_PAQUETE $PAQUETE_EPGIMPORT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Epgimport Desistalado"
+        echo "Desinstalando Epgimport"; echo; $BORRAR_PAQUETE $PAQUETE_EPGIMPORT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Epgimport Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_JUNGLESCRIPT)" ]; then
-        echo "Desistalando Junglescript"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLESCRIPT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 JungleScript Desistalado"
+        echo "Desinstalando Junglescript"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLESCRIPT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 JungleScript Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_JUNGLEBOT)" ]; then
-        echo "Desistalando Jungleblot"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLEBOT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Junglebot Desistalado"
+        echo "Desinstalando Jungleblot"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLEBOT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Junglebot Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_ARM)" ]; then
-        echo "Desistalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_ARM >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_ARM >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL)" ]; then
-        echo "Desistalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_OSCAMCONCLAVE)" ]; then
-        echo "Desistalando Oscam Conclave"; echo; $BORRAR_PAQUETE $PAQUETE_OSCAMCONCLAVE >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 OscamConclave Desistalado"
+        echo "Desinstalando Oscam Conclave"; echo; $BORRAR_PAQUETE $PAQUETE_OSCAMCONCLAVE >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 OscamConclave Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_TDTCHANNLES)" ]; then
-        echo "Desistalando TdtChannels"; echo; $BORRAR_PAQUETE $PAQUETE_TDTCHANNLES >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 TdtChannels Desistalado"
+        echo "Desinstalando TdtChannels"; echo; $BORRAR_PAQUETE $PAQUETE_TDTCHANNLES >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 TdtChannels Desistalado"
     fi
      if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-oscam-trunk-ipv4only)" ]; then
-        echo "Desistalando Oscam Trunk"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-oscam-trunk-ipv4only >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam Trunk Desistalado"
+        echo "Desinstalando Oscam Trunk"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-oscam-trunk-ipv4only >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam Trunk Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-oscam-icam)" ]; then
-        echo "Desistalando Oscam icam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-oscam-icam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam icam Desistalado"
+        echo "Desinstalando Oscam icam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-oscam-icam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam icam Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-ncam)" ]; then
-        echo "Desistalando Oscam ncam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-ncam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam ncam Desistalado"
+        echo "Desinstalando Oscam ncam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-ncam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam ncam Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE zerotier)" ]; then
-        echo "Desistalando zerotier"; echo; $BORRAR_PAQUETE zerotier >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 zerotier Desistalado"
+        echo "Desinstalando zerotier"; echo; $BORRAR_PAQUETE zerotier >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 zerotier Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE tailscale)" ]; then
-        echo "Desistalando tailscale"; echo; $BORRAR_PAQUETE tailscale >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 tailscale Desistalado"
+        echo "Desinstalando tailscale"; echo; $BORRAR_PAQUETE tailscale >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 tailscale Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE openvpn)" ]; then
-        echo "Desistalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desistalado"
+        echo "Desinstalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jedimakerxtream)" ]; then
-        echo "Desistalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desistalado"
+        echo "Desinstalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jediepgxtream)" ]; then
-        echo "Desistalando jediepgxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jediepgxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jediepgxtream Desistalado"
+        echo "Desinstalando jediepgxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jediepgxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jediepgxtream Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE streamproxy)" ]; then
-        echo "Desistalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desistalado"
+        echo "Desinstalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-xstreamity)" ]; then
-        echo "Desistalando xstreamity"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xstreamity >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xstreamity Desistalado"
+        echo "Desinstalando xstreamity"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xstreamity >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xstreamity Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm)" ]; then
-        echo "Desistalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
+        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel)" ]; then
-        echo "Desistalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
+        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE sendunicable)" ]; then
-        echo "Desistalando sendunicable"; echo; $BORRAR_PAQUETE sendunicable >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 sendunicable Desistalado"
+        echo "Desinstalando sendunicable"; echo; $BORRAR_PAQUETE sendunicable >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 sendunicable Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-skins-op-artkoala)" ]; then
-        echo "Desistalando op-artkoala"; echo; $BORRAR_PAQUETE enigma2-plugin-skins-op-artkoala >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 op-artkoala Desistalado"
+        echo "Desinstalando op-artkoala"; echo; $BORRAR_PAQUETE enigma2-plugin-skins-op-artkoala >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 op-artkoala Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-junglescripttool)" ]; then
-        echo "Desistalando junglescripttool"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglescripttool >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglescripttool Desistalado"
+        echo "Desinstalando junglescripttool"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglescripttool >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglescripttool Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-footOnsat)" ]; then
-        echo "Desistalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desistalado"
+        echo "Desinstalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam-arm-es)" ]; then
-        echo "Desistalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-arm-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
+        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-arm-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam-mipsel-es)" ]; then
-        echo "Desistalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-mipsel-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
+        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-mipsel-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
     fi                                                                                                                                                                                                                                                           
     echo
     echo "----Espere, dentro de 5 segundos se volvera al menu principal-----"
@@ -714,8 +877,9 @@ function ayuda () {
 	seleccionando utilidades a instalar.
   - Durante la instalacion Guiada podras ir seleccionando que paquetes instalar,
   	esta seleccion sera introduciendo los parametros necesarios.
-  - Tenemos menu de desistalacion si deseamos borrar todo lo instalado referente a
+  - Tenemos menu de desinstalacion si deseamos borrar todo lo instalado referente a
     paquetes especificos de jungle-team.
+  - Puede crear backup de archivos configuracion mas usuales y restaurarlos  
   - Del proceso de instalacion se crea log en /var/log/speedy_autoinstall.log
   - Grupo telegram ayuda: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA 
   - Github: https://github.com/jungla-team/Speedy-OEA-autoinstall
