@@ -62,7 +62,7 @@ if [[ "$DISTRO" == "openatv" ]]; then
 elif [[ "$DISTRO" == "egami" ]]; then
     echo -e "${YELLOW}👍 Se ha detectado que tienes instalado Egami, se procede a la ejecucion de la instalacion.${RESET}"
     $TIEMPO_ESPERA
-    wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/images-execute/execute_speedy_egami.sh; bash execute_speedy_openatv.sh; rm -r execute_speedy_openatv.sh    
+    wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/images-execute/execute_speedy_egami.sh; bash execute_speedy_egami.sh; rm -r execute_speedy_egami.sh    
 else
     echo -e "${RED}⛔️ Lo siento, no se ha detectado ninguna imagen compatible, $TEXTO_SALIDA.${RESET}"
     $TIEMPO_ESPERA
