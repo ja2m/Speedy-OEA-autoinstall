@@ -687,7 +687,7 @@ function install_cccam_egami() {
     url="http://tropical.jungle-team.online/auto_install_images/egamiccammipsel.zip"
   fi
   wget "$url" -O /tmp/cccam.zip >>$SPEEDY_LOG 2>&1
-  unzip -q /tmp/cccam.zip -d / >>$SPEEDY_LOG 2>&1
+  unzip -q -o /tmp/cccam.zip -d / >>$SPEEDY_LOG 2>&1
   chmod 777 /usr/bin/CCcamsp /usr/emu_scripts/EGcam_CCcam2.3.2es.sh >>$SPEEDY_LOG 2>&1
  
 }
