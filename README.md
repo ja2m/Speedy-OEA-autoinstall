@@ -21,6 +21,7 @@ Speedy OEA Autoinstall esta desarrollado bajo  `shell` y puede ser utilizado par
 
  - OpenATV 7.2
  - Egami 10.3
+ - Openspa 8.x
 
 Por el tipo de interfaz de iconos y barras de progreso que se usa, se recomienda para poder disfrutar de toda la grafica, la terminal de windows nueva:
 
