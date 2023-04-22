@@ -1,122 +1,128 @@
 #!/bin/bash
-#Menu opciones para junglescript
-#Realizado por Jungle-team
-#Version 2.0
+# Menu opciones para junglescript
+# Realizado por Jungle-team
+# Version 3.0
 #==============================================================================
-VERDE='\033[0;32m'
-ROJO='\033[0;31m'
-NC='\033[0m'
-negrita='\033[1m'
 
-rojo='\033[0;31m'
-verde='\033[0;32m'
-blanco='\033[0;37m'
-azul='\033[0;34m'
-borrar='\033[0m'
-amarillo='\033[0;33m' 
-NC='\033[0m'
+# Ruta al archivo de configuración
+CONFIG_FILE="/usr/bin/enigma2_pre_start.conf"
+
+#Definimos colores para mensajes
+GREEN="\e[32m"
+YELLOW="\e[33m"
+RED="\e[31m"
+BLUE="\e[34m"
+RESET="\e[0m"
+RED_BOLD="\e[1;31m"
+GREEN_BOLD="\e[1;32m"
+YELLOW_BOLD="\e[1;33m"
+BLUE_BOLD="\e[1;34m"
 
 
-#Opciones de instalacion junglescript
-options[0]="Instalar lista Canales Astra"
-options[1]="Instalar lista Canales Astra-Hotbird"
-options[2]="Instalar lista Canales Astra-Hispasat"
-options[3]="Instalar lista Canales Astra-Hispasat-Hotbird"
-options[4]="Instalar lista Canales Astra Comunitarias"
-options[5]="Activar Picon (marcar si deseas instalacion picon)"
-options[6]="Instalar Picon Version original"
-options[7]="Instalar Picon Version Color"
-options[8]="Instalar Picon Version Lunar"
+# Opciones de configuracion de  junglescript
+options=(
+    "Activar lista Canales (marcar si deseas instalacion lista canales)"
+    "Instalar lista Canales Astra"
+    "Instalar lista Canales Astra-Hotbird"
+    "Instalar lista Canales Astra-Hispasat"
+    "Instalar lista Canales Astra-Hispasat-Hotbird"
+    "Instalar lista Canales Astra Comunitarias"
+    "Activar Picon (marcar si deseas instalacion picon)"
+    "Instalar Picon Version original"
+    "Instalar Picon Version Color"
+    "Instalar Picon Version Lunar"
+)
 
-#Acciones
+# Acciones
 function JUNGLESCRIPT {
-    if [[ ${choices[0]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado instalacion Astra${borrar}"
-        lista="astra"
-    fi
-    if [[ ${choices[1]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado instalacion Astra-hotbird${borrar}"
-        lista="astra-hotbird"
-    fi
-    if [[ ${choices[2]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado instalacion Astra-hispasat${borrar}"
-        lista="astra-hispasat"
-    fi
-    if [[ ${choices[3]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado instalacion Astra-hotbird-hispasat${borrar}"
-        lista="astra-hotbird-hispasat"
-    fi
-    if [[ ${choices[4]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado instalacion Astra-Comunitaria${borrar}"
-        lista="astra-comunitaria"
-    fi
-    if [[ ${choices[5]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado Activacion de Picon${borrar}"
-        picon=1
-    fi
-    if [[ ${choices[6]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado picon original${borrar}"
-        tipopicon=movistar-original
-    fi
-    if [[ ${choices[7]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado picon color${borrar}"
-        tipopicon=movistar-color
-    fi
-    if [[ ${choices[8]} ]]; then
-        echo -e "${negrita}${amarillol}* Has seleccionado picon lunar${borrar}"
-        tipopicon=movistar-lunar
-    fi
-     
-    
-	   cat <<EOF > /usr/bin/enigma2_pre_start.conf
-LISTACANALES=$lista
-PICONS=$picon
-TIPOPICON=$tipopicon
-EOF
+    lista=0
+    listacanales=""
+    picon=0
+    tipopicon=""
 
+    # Asignar valores a las variables según las opciones seleccionadas
+    for i in ${!choices[@]}; do
+        if [[ ${choices[i]} ]]; then
+            case $i in
+                0) lista=1 ;;
+                1) listacanales="astra" ;;
+                2) listacanales="astra-hotbird" ;;
+                3) listacanales="astra-hispasat" ;;
+                4) listacanales="astra-hotbird-hispasat" ;;
+                5) listacanales="astra-comunitaria" ;;
+                6) picon=1 ;;
+                7) tipopicon="movistar-original" ;;
+                8) tipopicon="movistar-color" ;;
+                9) tipopicon="movistar-lunar" ;;
+            esac
+        fi
+    done
+
+    # Actualizar variables en el archivo de configuración
+    sed -i "s/^LISTA=.*/LISTA=$lista/" $CONFIG_FILE
+    sed -i "s/^LISTACANALES=.*/LISTACANALES=$listacanales/" $CONFIG_FILE
+    sed -i "s/^PICONS=.*/PICONS=$picon/" $CONFIG_FILE
+    sed -i "s/^TIPOPICON=.*/TIPOPICON=$tipopicon/" $CONFIG_FILE
 }
 
-#Variables
+# Variables
 ERROR=" "
 
-
-
-#borrar opciones menu
+# Borrar opciones menú
 clear
 
-#funcion de menu
+# Función de menú
 function MENU {
-    echo -e "${negrita}${azul}OPCIONES DE INSTALACION DE JUNGLESCRIPT${borrar}"
-    echo "-------------------------------------------------------------------------------------------------------------------------------------------"
-    echo ""
-    echo -e "${negrita}${rojo}-introduzca el valor numerico si es de un digito pulsar enter para confirmar${borrar}"
-    echo -e "${negrita}${rojo}-Si ha seleccionado erroneamente vuelve a introducir el mismo valor numerico para deseleccionar${borrar}"
-    echo -e "${negrita}${rojo}-Al finalizar la seleccion de las opciones pulsar enter para terminar${borrar}"
-    echo -e "${negrita}${rojo}-Si desea cambiar las opciones una vez terminado autosonic modifique el archivo /usr/bin/enigma2_pre_start.conf${borrar}"
-    echo ""
-    echo "-------------------------------------------------------------------------------------------------------------------------------------------"
-    echo ""
-    for NUM in ${!options[@]}; do
-        echo "[""${choices[NUM]:- }""]" $(( NUM+1 ))") ${options[NUM]}"
+    echo -e "${BLUE_BOLD}OPCIONES DE CONFIGURACION DE JUNGLESCRIPT${RESET}"
+    echo
+    echo -e "${YELLOW}-------------------------------------------------------------------------------------------------------------------------------------------"
+    echo
+    echo  "-introduzca el valor numerico si es de un digito pulsar enter para confirmar"
+    echo  "-Si ha seleccionado erroneamente vuelve a introducir el mismo valor numerico para deseleccionar"
+    echo  "-Al finalizar la seleccion de las opciones pulsar enter para terminar"
+    echo  "-Si desea cambiar las opciones una vez terminado SPEEDY modifique el archivo /usr/bin/enigma2_pre_start.conf"
+    echo
+    echo -e "-------------------------------------------------------------------------------------------------------------------------------------------${RESET}"
+    echo 
+    echo
+    echo -e "${GREEN_BOLD}Selecciona las opciones que desees instalar y presiona ENTER${RESET}"
+    echo
+
+    # Mostrar las opciones del menú con su estado actual
+    for i in ${!options[@]}; do
+        # Verificar si la opción está seleccionada
+        if [[ ${choices[i]} ]]; then
+            echo -e "${amarillo}[$i] [👍] ${options[i]}${NC}"
+        else
+            echo -e "${amarillo}[$i] [ ] ${options[i]}${NC}"
+        fi
     done
-    echo "$ERROR"
 }
 
-#Menu instalacion
-while MENU && read -e -p "Introduzca las opciones de instalacion introduciendo su valor numerico para marcarlas: " -n2 SELECTION && [[ -n "$SELECTION" ]]; do
+# Menú de opciones
+while true; do
     clear
-    if [[ "$SELECTION" == *[[:digit:]]* && $SELECTION -ge 1 && $SELECTION -le ${#options[@]} ]]; then
-        (( SELECTION-- ))
-        if [[ "${choices[SELECTION]}" == "+" ]]; then
-            choices[SELECTION]=""
+    MENU
+    echo
+    read -p $'\033[1;32m'"Selecciona una opción: "$'\033[0m' opcion
+
+
+    # Comprobar si la opción es válida
+    if [[ $opcion =~ ^[0-9]+$ ]] && [ "$opcion" -ge 0 ] && [ "$opcion" -lt ${#options[@]} ]; then
+        # Alternar la selección de la opción
+        if [[ ${choices[opcion]} ]]; then
+            choices[opcion]=""
         else
-            choices[SELECTION]="X"
+            choices[opcion]="1"
         fi
-            ERROR=" "
+    # Si la opción no es válida, mostrar mensaje de error
+    elif [[ $opcion == '' ]]; then
+        break
     else
-        ERROR="Opcion invalida: $SELECTION"
+        echo -e "${RED_BOLD}ERROR: Opción inválida${RESET}"
+        sleep 2
     fi
 done
 
-
+# Ejecutar la función JUNGLESCRIPT para aplicar las opciones seleccionadas
 JUNGLESCRIPT
