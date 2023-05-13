@@ -47,6 +47,8 @@ fi
 # Definimos nombre de imagen instalada en receptor enigma2
 if [ -f /etc/image-version  ]; then
 	DISTRO=$(cat /etc/image-version | grep distro | sed -e 's/distro=//')
+elif grep -qs "openpli" /etc/issue ; then
+    DISTRO="openpli"
 else
     echo -e "${RED}⚠️ No se ha podido detectar la imagen instalada, $TEXTO_SALIDA ${RESET}"
     $TIEMPO_ESPERA
@@ -66,7 +68,11 @@ elif [[ "$DISTRO" == "egami" ]]; then
 elif [[ "$DISTRO" == "openspa" ]]; then
     echo -e "${YELLOW}👍 Se ha detectado que tienes instalado openspa, se procede a la ejecucion de la instalacion.${RESET}"
     $TIEMPO_ESPERA
-    wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/images-execute/execute_speedy_openspa.sh; bash execute_speedy_openspa.sh; rm -r execute_speedy_openspa.sh        
+    wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/images-execute/execute_speedy_openspa.sh; bash execute_speedy_openspa.sh; rm -r execute_speedy_openspa.sh
+elif [[ "$DISTRO" == "openpli" ]]; then
+    echo -e "${YELLOW}👍 Se ha detectado que tienes instalado OpenPLi, se procede a la ejecucion de la instalacion.${RESET}"
+    $TIEMPO_ESPERA
+    wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/images-execute/execute_speedy_openpli.sh; bash execute_speedy_openpli.sh; rm -r execute_speedy_openpli.sh	          
 else
     echo -e "${RED}⛔️ Lo siento, no se ha detectado ninguna imagen compatible, $TEXTO_SALIDA.${RESET}"
     $TIEMPO_ESPERA
