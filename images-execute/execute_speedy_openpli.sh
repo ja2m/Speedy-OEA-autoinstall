@@ -2,7 +2,7 @@
 
 ###################  Jungle-team   ######################
 #                  jungle-team.es  ######################
-#            speedy OEA Autoinstalacion Egami           #
+#            speedy OEA Autoinstalacion OpenPli         #
 #                    version 1.4                        #
 ######################################################### 
 
@@ -131,8 +131,8 @@ echo ""
 #Definimos valores de informacion receptor para el menu speedy OEA      
 MODELO_RECEPTOR="$(cat /etc/hostname)"
 ARQUITECTURA_RECEPTOR="$(uname -m)"
-VERSION_IMAGEN="$(cat /etc/image-version | grep imageversion | sed -e 's/imageversion=//')"
-DATOS_COMPILACION="$(cat /etc/image-version | grep imagebuild= | sed -e 's/imagebuild=//')"
+VERSION_IMAGEN=" "
+DATOS_COMPILACION="$(cat /etc/version)"
 MEMORIA_RAM=$(free | grep Mem  | awk '{ print $4 }')
 MEMORIA_FLASH=$(df -h | awk 'NR == 2 {print $4}')
 FECHA_RECEPTOR="$(date)"
@@ -220,6 +220,7 @@ function status_server_jungleteam() {
 
 }
 
+#Modulo base para instalaciones paquetes
 function Modulo_package_gestion() {
     echo -e "${BLUE_BOLD}$2${RESET}"
     PS3="¿Deseas instalar el paquete $1? "
@@ -233,10 +234,6 @@ function Modulo_package_gestion() {
                 if [[ $5 == "extra_comando" ]]; then
                     echo "Ejecutando acción adicional después de instalar $1."
                     eval "$6"
-                fi
-                if [[ $7 == "extra_comando2" ]]; then
-                    echo "Ejecutando segunda acción adicional después de instalar $1."
-                    eval "$8"
                 fi
                 break;;
             "No")
@@ -264,7 +261,7 @@ function MENU_SPEEDY_OEA() {
                .::-::::::::::::::::::::::-.       
             :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.4
           :-::::::::::::::::::::::::::::::::      
-        :-:::::::::::::::::::::::::::::::::-                Imagen Compatible: Egami
+        :-:::::::::::::::::::::::::::::::::-                Imagen Compatible: Openpli
        -::::::::::::::::::::::::::::::::::::-     
      .-::::::::---::::::::::::::::::::::::::=:::            Web: www.jungle-team.es
     --:::::::-=+*#%%%#*+==-::::::::::::::::::=::  
@@ -299,7 +296,7 @@ EOF
 	echo -e "${YELLOW}💡 Informacion Receptor:${RESET}"
 	echo
 	echo -e "${GREEN}Receptor:${RESET} $MODELO_RECEPTOR"
-    echo -e "${GREEN}Imagen Version:${RESET} Egami $VERSION_IMAGEN"
+    echo -e "${GREEN}Imagen Version:${RESET} OpenPli $VERSION_IMAGEN"
     echo -e "${GREEN}Version PYTHON:${RESET} $PYTHONVERSION"
     echo -e "${GREEN}Fecha Compilacion:${RESET}$DATOS_COMPILACION"
 	echo -e "${GREEN}Arquitectura:${RESET} $ARQUITECTURA_RECEPTOR"
@@ -360,24 +357,25 @@ done
 	echo -e "${BLUE}💡  En nuestro receptor puede seleccionar la instalacion de las siguientes utilidades:${RESET}"
 	echo
 	cat << "EOF"
+  - Repositorios jungle-team
   - JungleScript -- Auto instalacion lista canales y picon
   - JungleBot -- Para controlar tu receptor por Telegram
   - Oscam-Conclave -- Auto instalacion oscam ultima version
+  - Oscam -- Version oscam compilada por openatv
+  - Oscam emu -- Version emu de oscam
   - CCcam 2.3.2 64 bits spain -- Version estable para spain
   - Ghostreamy - Panel gestion Stream Enigma2
   - EpgImport - Para descarga EPG con fuentes oficiales koala para Movistar+
   - Zerotier - Para acceder al receptor via vpn
   - Tdtchannels - crea favorito y picon canales tdt por web
-  - Tailscale - Para acceder al receptor via vpn
-  - Diseqc - Para programar LNB Unicable
+   - Diseqc - Para programar LNB Unicable
   - Asignar password al receptor
   - Poner automaticamente en hora el receptor
-  - FoonSat - Para eventos deportivos de futbol
   - Streamproxy - activar solicitud pass en streaming openwebif 
   - jedimakerxtream - Para instalar listas iptv en nuestro receptor
-  - jediepgxtream - Para asignar epg a los canales iptv
   - openvpn - Para acceder al receptor via vpn
   - FootOnsat - Informacion de eventos deportivos
+  - vpn_wireguard - Para acceder via vpn 
   - junglem3utobouquet - Para crearte favoritos enigma2 desde una lista m3u o favorito icam
   - epgmhw2 - Epg desde canal portada
   - xstreamity - Para instalar listas iptv
@@ -455,7 +453,7 @@ function DEPENDENCIAS() {
 
 
 function cambiar_password() {
-    local confirmacion="💡  ¿Egami no tiene contraseña por defecto. ¿Desea asignarle una? entonces introduzca si + intro o intro para cancelar"
+    local confirmacion="💡  ¿OpenPli no tiene contraseña por defecto. ¿Desea asignarle una? entonces introduzca si + intro o intro para cancelar"
     echo -e "${BLUE_BOLD}$confirmacion${RESET}"
     read respuesta
     respuesta=$(echo "$respuesta" | tr '[:upper:]' '[:lower:]')  # Convertir la respuesta a minúsculas
@@ -472,6 +470,21 @@ function cambiar_password() {
         echo "No se cambia la contraseña."
     fi
 }
+
+function cambiar_arranque_emus() {
+    local confirmacion="💡  En algunos receptores puede haber congelaciones al reiniciar receptor debido al arranque de la emu. ¿Desea modificar el arranque? entonces introduzca si + intro o intro para cancelar"
+    echo -e "${BLUE_BOLD}$confirmacion${RESET}"
+    read respuesta
+    respuesta=$(echo "$respuesta" | tr '[:upper:]' '[:lower:]')  # Convertir la respuesta a minúsculas
+    if [[ "$respuesta" == "si" ]]; then
+        echo -n "se procede a cambiar el metodo de arranque "
+        mv /etc/rc0.d/K50softcam /etc/rc0.d/K98softcam; mv /etc/rc1.d/K50softcam /etc/rc1.d/K98softcam; mv /etc/rc2.d/S50softcam /etc/rc2.d/S98softcam; mv /etc/rc3.d/S50softcam /etc/rc3.d/S98softcam; mv /etc/rc4.d/S50softcam /etc/rc4.d/S98softcam; mv /etc/rc5.d/S50softcam /etc/rc5.d/S98softcam; mv /etc/rc6.d/K50softcam /etc/rc6.d/K98softcam
+        echo
+    else
+        echo "No se cambia el metodo de arranque."
+    fi
+}
+
 
 
 function update() {
@@ -678,37 +691,6 @@ function cambiar_parametros_junglebot() {
 
 }
 
-#Definimos instalacion de cccam spain para imagenes egami
-function install_cccam_egami() {
-  local is_arm=$(uname -a | grep -i arm | wc -l)
-  local url
-  if [ "$is_arm" -gt 0 ]; then
-    url="http://tropical.jungle-team.online/auto_install_images/Egami_cccamarm.zip"
-  else
-    url="http://tropical.jungle-team.online/auto_install_images/egamiccammipsel.zip"
-  fi
-  wget "$url" -O /tmp/cccam.zip >>$SPEEDY_LOG 2>&1
-  unzip -q -o /tmp/cccam.zip -d / >>$SPEEDY_LOG 2>&1
-  chmod 777 /usr/bin/CCcamsp /usr/emu_scripts/EGcam_CCcam2.3.2es.sh >>$SPEEDY_LOG 2>&1
- 
-}
-
-function cambiar_arranque_emus() {
-    local confirmacion="💡  En algunos receptores puede haber congelaciones al reiniciar receptor debido al arranque de la emu. ¿Desea modificar el arranque? entonces introduzca si + intro o intro para cancelar"
-    echo -e "${BLUE_BOLD}$confirmacion${RESET}"
-    read respuesta
-    respuesta=$(echo "$respuesta" | tr '[:upper:]' '[:lower:]')  # Convertir la respuesta a minúsculas
-    if [[ "$respuesta" == "si" ]]; then
-        echo -n "se procede a cambiar el metodo de arranque "
-        mv /etc/rc0.d/K20egamiemud /etc/rc0.d/K98egamiemud; mv /etc/rc1.d/K20egamiemud /etc/rc1.d/K98egamiemud; mv /etc/rc2.d/S20egamiemud /etc/rc2.d/S98egamiemud; mv /etc/rc3.d/S20egamiemud /etc/rc3.d/S98egamiemud; mv /etc/rc4.d/S20egamiemud /etc/rc4.d/S98egamiemud; mv /etc/rc5.d/S20egamiemud /etc/rc5.d/S98egamiemud; mv /etc/rc6.d/K20egamiemud /etc/rc6.d/K98egamiemud
-        echo
-    else
-        echo "No se cambia el metodo de arranque."
-    fi
-}
-
-
-
 function logo(){
 	clear
 	echo -e "\e[32m${VERDE} ******************************************************************************\e[0m"
@@ -719,7 +701,7 @@ function logo(){
     echo -e "\e[32m${VERDE} * | |_| | |__| | |\  | |__| | |____| |____     | |  | |____ / ____ \| |  | | *\e[0m"
     echo -e "\e[32m${VERDE} * \____/ \____/|_| \_|\_____|______|______|    |_|  |______/_/    \_\_|  |_| *\e[0m"        
 	echo -e "\e[32m${VERDE} *        																	 *\e[0m"
-	echo -e "\e[32m${VERDE} *                          SPEEDY OEA-Egami               					 *\e[0m"
+	echo -e "\e[32m${VERDE} *                          SPEEDY OEA-Openpli           					 *\e[0m"
 	echo -e "\e[32m${VERDE} *      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA          *\e[0m"
 	echo -e "\e[32m${VERDE} *                            VERSION 1.4                                     *\e[0m"
 	echo -e "\e[32m${VERDE} *                           jungle-team.com                                  *\e[0m"
@@ -732,19 +714,20 @@ function install_packages() {
  hora
  junglefeed
  update
-#Se ejecuta instalacion de paquetes propios de Egami
+#Se ejecuta instalacion de paquetes propios de openatv
  Modulo_package_gestion "$PAQUETE_EPGIMPORT" "🧐  Opciones Solicitud de instalacion EPGIMPORT" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "softcam-support" "🧐  Opciones Solicitud de instalacion softcam-support necesario para arranque emus" "$INSTALACION_FORZADA" "5" 
+ Modulo_package_gestion "enigma2-plugin-softcams-oscam" "🧐  Opciones Solicitud de instalacion Oscam" "$INSTALACION_FORZADA" "5"
+ Modulo_package_gestion "enigma2-plugin-softcams-oscam-emu" "🧐  Opciones Solicitud de instalacion Oscam emu" "$INSTALACION_FORZADA" "5"
+ Modulo_package_gestion "enigma2-plugin-softcams-cccam" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 64 bits spain" "$INSTALACION_FORZADA" "5" "extra_comando" "$COMANDO_CCCAM"
+ cambiar_arranque_emus
  Modulo_package_gestion "zerotier" "🧐  Opciones Solicitud de instalacion Zerotier" "$INSTALACION_FORZADA" "5"
- Modulo_package_gestion "tailscale" "🧐  Opciones Solicitud de instalacion Tailscale" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "openvpn" "🧐  Opciones Solicitud de instalacion Openvpn" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-jedimakerxtream" "🧐  Opciones Solicitud de instalacion jedimakerxtream" "$INSTALACION_NORMAL" "5"
- Modulo_package_gestion "enigma2-plugin-extensions-jediepgxtream" "🧐  Opciones Solicitud de instalacion jediepgxtream" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "streamproxy" "🧐  Opciones Solicitud de instalacion streamproxy" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-xstreamity" "🧐  Opciones Solicitud de instalacion xstreamity" "$INSTALACION_NORMAL" "5"
 #Se ejecuta instalacion de paquetes de jungle-team
  Modulo_package_gestion "$PAQUETE_OSCAMCONCLAVE" "🧐  Opciones Solicitud de instalacion Oscam Conclave" "$INSTALACION_FORZADA" "10"
- Modulo_package_gestion "enigma2-plugin-softcams-cccam" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 64 bits spain" "$INSTALACION_NORMAL" "5" "extra_comando" "install_cccam_egami" "extra_comando2" "$COMANDO_CCCAM"
- cambiar_arranque_emus
  if [ "$es_arm" -gt 0 ];
  then
 	 Modulo_package_gestion "$PAQUETE_GHOSTREAMY_ARM" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10"
@@ -770,7 +753,7 @@ function install_packages() {
  Modulo_package_gestion "enigma2-plugin-extensions-junglescripttool" "🧐  Opciones Solicitud de instalacion JungleScript Tools" "$INSTALACION_FORZADA" "5"
 #Instalaciones especiales
  Modulo_package_gestion "enigma2-plugin-extensions-footOnsat" "🧐  Opciones Solicitud de instalacion FootOnsat" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_FOOTONSAT"
-  Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5"
+ Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5"
  cambiar_password 
  init 3
  mensaje "Terminada la ejecucion de Speedy OEA Autoinstall, ahora se volvera al menu principal${GREEN}"
@@ -805,20 +788,17 @@ function remove() {
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_TDTCHANNLES)" ]; then
         echo "Desinstalando TdtChannels"; echo; $BORRAR_PAQUETE $PAQUETE_TDTCHANNLES >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 TdtChannels Desistalado"
     fi
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-ncam)" ]; then
+        echo "Desinstalando Oscam ncam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-ncam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam ncam Desistalado"
+    fi
     if [ -n "$($ESTATUS_PAQUETE zerotier)" ]; then
         echo "Desinstalando zerotier"; echo; $BORRAR_PAQUETE zerotier >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 zerotier Desistalado"
-    fi
-    if [ -n "$($ESTATUS_PAQUETE tailscale)" ]; then
-        echo "Desinstalando tailscale"; echo; $BORRAR_PAQUETE tailscale >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 tailscale Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE openvpn)" ]; then
         echo "Desinstalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jedimakerxtream)" ]; then
         echo "Desinstalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desistalado"
-    fi
-    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jediepgxtream)" ]; then
-        echo "Desinstalando jediepgxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jediepgxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jediepgxtream Desistalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE streamproxy)" ]; then
         echo "Desinstalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desistalado"
@@ -840,10 +820,13 @@ function remove() {
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-footOnsat)" ]; then
         echo "Desinstalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desistalado"
-    fi   
+    fi
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam)" ]; then
+        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
+    fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-junglem3utobouquet)" ]; then
         echo "Desinstalando junglem3utobouquet"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglem3utobouquet >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglem3utobouquet Desistalado"
-    fi                                                                                                                                                                                                                                                    
+    fi                                                                                                                                                                                                                            
     echo
     echo "----Espere, dentro de 5 segundos se volvera al menu principal-----"
     sleep 5

@@ -3,7 +3,7 @@
 ###################  Jungle-team   ######################
 #                  jungle-team.es  ######################
 #            speedy OEA Autoinstalacion OpenaTV         #
-#                    version 1.3                        #
+#                    version 1.4                        #
 ######################################################### 
 
 #Definimos paquetes mas usuales de archivos a instalar
@@ -259,7 +259,7 @@ function MENU_SPEEDY_OEA() {
                      .::::::::::::::::-:          
                    :::::::::::::::::::::-.                  ¡Ándale, ándale, ándale yiiija! Rapidamente tu imagen configurada
                .::-::::::::::::::::::::::-.       
-            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.3
+            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.4
           :-::::::::::::::::::::::::::::::::      
         :-:::::::::::::::::::::::::::::::::-                Imagen Compatible: OpenATV
        -::::::::::::::::::::::::::::::::::::-     
@@ -271,7 +271,7 @@ function MENU_SPEEDY_OEA() {
   :-:::::=+++++#@@@%#++=.==+++++++=::::::::::-    
    :=----+++++*+*###++++++*+++++++++-:----::::.             Licencia: General Public License
     .--::-+++++*+++++*%@*++++++++++++++++++-::-   
-      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 01-04-2023
+      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 13-05-2023
          .:-=++++%@@@@*+++++++++++=-:.....:-::::-.
              :****###+++++++++++++=:....:-:::::::-
   ..       :*%%%%%##****+==+==--:--=----:::::::::.
@@ -362,7 +362,7 @@ done
   - JungleBot -- Para controlar tu receptor por Telegram
   - Oscam-Conclave -- Auto instalacion oscam ultima version
   - Oscam-Trunk -- Version oscam compilada por openatv
-  - CCcam 2.3.2 -- Version estable para spain
+  - CCcam 2.3.2 64 bits spain -- Version estable para spain
   - Ncam -- Emuladora basada en Oscam
   - Ghostreamy - Panel gestion Stream Enigma2
   - EpgImport - Para descarga EPG con fuentes oficiales koala para Movistar+
@@ -381,6 +381,7 @@ done
   - FootOnsat - Informacion de eventos deportivos
   - vpn_wireguard - Para acceder via vpn 
   - skin op-artkoala
+  - junglem3utobouquet - Para crearte favoritos enigma2 desde una lista m3u o favorito icam
   - epgmhw2 - Epg desde canal portada
   - xstreamity - Para instalar listas iptv
   - JungleScript Tools - Plugin interfaz grafica junglescript          
@@ -493,6 +494,21 @@ function cambiar_password() {
         echo "No se cambia la contraseña."
     fi
 }
+
+function cambiar_arranque_emus() {
+    local confirmacion="💡  En algunos receptores puede haber congelaciones al reiniciar receptor debido al arranque de la emu. ¿Desea modificar el arranque? entonces introduzca si + intro o intro para cancelar"
+    echo -e "${BLUE_BOLD}$confirmacion${RESET}"
+    read respuesta
+    respuesta=$(echo "$respuesta" | tr '[:upper:]' '[:lower:]')  # Convertir la respuesta a minúsculas
+    if [[ "$respuesta" == "si" ]]; then
+        echo -n "se procede a cambiar el metodo de arranque "
+        mv /etc/rc0.d/K50softcam /etc/rc0.d/K98softcam; mv /etc/rc1.d/K50softcam /etc/rc1.d/K98softcam; mv /etc/rc2.d/S50softcam /etc/rc2.d/S98softcam; mv /etc/rc3.d/S50softcam /etc/rc3.d/S98softcam; mv /etc/rc4.d/S50softcam /etc/rc4.d/S98softcam; mv /etc/rc5.d/S50softcam /etc/rc5.d/S98softcam; mv /etc/rc6.d/K50softcam /etc/rc6.d/K98softcam
+        echo
+    else
+        echo "No se cambia el metodo de arranque."
+    fi
+}
+
 
 
 function update() {
@@ -711,7 +727,7 @@ function logo(){
 	echo -e "\e[32m${VERDE} *        																	 *\e[0m"
 	echo -e "\e[32m${VERDE} *                          SPEEDY OEA-OpenATV            					 *\e[0m"
 	echo -e "\e[32m${VERDE} *      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA          *\e[0m"
-	echo -e "\e[32m${VERDE} *                            VERSION 1.3                                     *\e[0m"
+	echo -e "\e[32m${VERDE} *                            VERSION 1.4                                     *\e[0m"
 	echo -e "\e[32m${VERDE} *                           jungle-team.com                                  *\e[0m"
 	echo -e "\e[32m${VERDE} ******************************************************************************\e[0m"
 }
@@ -728,6 +744,8 @@ function install_packages() {
  Modulo_package_gestion "enigma2-plugin-softcams-oscam-trunk-ipv4only" "🧐  Opciones Solicitud de instalacion Oscam Trunk" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "enigma2-plugin-softcams-oscam-icam" "🧐  Opciones Solicitud de instalacion Oscam Icam" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "enigma2-plugin-softcams-ncam" "🧐  Opciones Solicitud de instalacion Ncam" "$INSTALACION_FORZADA" "5"
+ Modulo_package_gestion "enigma2-plugin-softcams-cccam" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 64 bits spain" "$INSTALACION_FORZADA" "5" "extra_comando" "$COMANDO_CCCAM"
+ cambiar_arranque_emus
  Modulo_package_gestion "zerotier" "🧐  Opciones Solicitud de instalacion Zerotier" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "tailscale" "🧐  Opciones Solicitud de instalacion Tailscale" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "openvpn" "🧐  Opciones Solicitud de instalacion Openvpn" "$INSTALACION_NORMAL" "5"
@@ -745,6 +763,7 @@ function install_packages() {
  fi
  Modulo_package_gestion "$PAQUETE_JUNGLEBOT" "🧐  Opciones Solicitud de instalacion Junglebot" "$INSTALACION_FORZADA" "45" "extra_comando" "$COMANDO_JUNGLEBOT"
  Modulo_package_gestion "$PAQUETE_TDTCHANNLES" "🧐  Opciones Solicitud de instalacion TdtChannels" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "enigma2-plugin-extensions-junglem3utobouquet" "🧐  Opciones Solicitud de instalacion junglem3utobouquet" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "$PAQUETE_JUNGLESCRIPT" "🧐  Opciones Solicitud de instalacion JungleScript" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_JUNGLESCRIPT"
  if [ "$es_arm" -gt 0 ];
  then
@@ -762,12 +781,6 @@ function install_packages() {
  Modulo_package_gestion "enigma2-plugin-extensions-junglescripttool" "🧐  Opciones Solicitud de instalacion JungleScript Tools" "$INSTALACION_FORZADA" "5"
 #Instalaciones especiales
  Modulo_package_gestion "enigma2-plugin-extensions-footOnsat" "🧐  Opciones Solicitud de instalacion FootOnsat" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_FOOTONSAT"
- if [ "$es_arm" -gt 0 ];
- then
-	 Modulo_package_gestion "enigma2-plugin-softcams-cccam-arm-es" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 spain" "$INSTALACION_FORZADA" "5" "extra_comando" "$COMANDO_CCCAM"
- else
-     Modulo_package_gestion "enigma2-plugin-softcams-cccam-mipsel-es" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 spain" "$INSTALACION_FORZADA" "5" "extra_comando" "COMANDO_CCCAM"
- fi
  Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5"
  cambiar_password 
  init 3
@@ -851,12 +864,12 @@ function remove() {
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-footOnsat)" ]; then
         echo "Desinstalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desistalado"
     fi
-    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam-arm-es)" ]; then
-        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-arm-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam)" ]; then
+        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
     fi
-    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam-mipsel-es)" ]; then
-        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam-mipsel-es >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
-    fi                                                                                                                                                                                                                                                           
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-junglem3utobouquet)" ]; then
+        echo "Desinstalando junglem3utobouquet"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglem3utobouquet >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglem3utobouquet Desistalado"
+    fi                                                                                                                                                                                                                            
     echo
     echo "----Espere, dentro de 5 segundos se volvera al menu principal-----"
     sleep 5

@@ -3,7 +3,7 @@
 ###################  Jungle-team   ######################
 #                  jungle-team.es  ######################
 #            speedy OEA Autoinstalacion OpenSpa         #
-#                    version 1.3                        #
+#                    version 1.4                        #
 ######################################################### 
 
 #Definimos paquetes mas usuales de archivos a instalar
@@ -44,20 +44,6 @@ BLUE_BOLD="\e[1;34m"
 
 #Definimos url del respositorio jungle-team
 REPOSITORIO_JUNGLE="http://tropical.jungle-team.online/script/jungle-feed.conf"
-URL_PAQUETES_IPK="http://tropical.jungle-team.online/oasis/H2O/"
-
-#Definimos comandos instalacion especiales para openspa
-COMANDO_INSTALAR_OP_JUNGLESCRIPT="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-junglescript_5.15_all.ipk"
-COMANDO_INSTALAR_OP_OSCAMCONCLAVE="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-softcams-oscam-conclave_2.8_all.ipk"
-COMANDO_INSTALAR_OP_GHOSTREAMY_ARM="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-ghostreamy-arm_3.1.4_all.ipk"
-COMANDO_INSTALAR_OP_GHOSTREAMY_MIPS="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-ghostreamy-mips_3.1.4_all.ipk"
-COMANDO_INSTALAR_OP_JUNGLEBOT="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-junglebot_4.1.1_all.ipk"
-COMANDO_INSTALAR_OP_TDTCHANNELS="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-tdtchannels_3.0_all.ipk"
-COMANDO_INSTALAR_OP_MHW_ARM="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-movistarepgdownload-arm_2.0_all.ipk"
-COMANDO_INSTALAR_OP_MHW_MIPS="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-movistarepgdownload-mipsel_2.0_all.ipk"
-COMANDO_INSTALAR_OP_SEND="$INSTALACION_FORZADA $URL_PAQUETES_IPK/sendunicable_1.0_arm_all.ipk"
-COMANDO_INSTALAR_OP_JUNGLESCRIPTTOOLS="$INSTALACION_FORZADA $URL_PAQUETES_IPK/enigma2-plugin-extensions-junglescripttool_2.4_all.ipk"
-COMANDO_INSTALAR_OP_JUNGLEBOTLOGO="$FORZAR_REINSTALL_ESCRITURA $URL_PAQUETES_IPK/enigma2-plugin-extensions-bootlogojungle_1.3_all.ipk"
 
 #Definimos la arquitectura de nuestro receptor
 es_arm=$(uname -a | grep -i arm | wc -l)
@@ -276,7 +262,7 @@ function MENU_SPEEDY_OEA() {
                      .::::::::::::::::-:          
                    :::::::::::::::::::::-.                  ¡Ándale, ándale, ándale yiiija! Rapidamente tu imagen configurada
                .::-::::::::::::::::::::::-.       
-            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.3
+            :-::::::::::::::::::::::::::::-                 Speedy OEA AutoInstall version: 1.4
           :-::::::::::::::::::::::::::::::::      
         :-:::::::::::::::::::::::::::::::::-                Imagen Compatible: OpenSpa
        -::::::::::::::::::::::::::::::::::::-     
@@ -288,7 +274,7 @@ function MENU_SPEEDY_OEA() {
   :-:::::=+++++#@@@%#++=.==+++++++=::::::::::-    
    :=----+++++*+*###++++++*+++++++++-:----::::.             Licencia: General Public License
     .--::-+++++*+++++*%@*++++++++++++++++++-::-   
-      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 01-04-2023
+      .:-:-++++++*%%@@@#++++++++++++-::...:=::::            Fecha Actualizacion: 13-05-2023
          .:-=++++%@@@@*+++++++++++=-:.....:-::::-.
              :****###+++++++++++++=:....:-:::::::-
   ..       :*%%%%%##****+==+==--:--=----:::::::::.
@@ -377,6 +363,7 @@ done
   - JungleScript -- Auto instalacion lista canales y picon
   - JungleBot -- Para controlar tu receptor por Telegram
   - Oscam-Conclave -- Auto instalacion oscam ultima version
+  - CCcam 2.3.2 64 bits spain -- Version estable para spain
   - Plugins Openspa
   - Ghostreamy - Panel gestion Stream Enigma2
   - EpgImport - Para descarga EPG con fuentes oficiales koala para Movistar+
@@ -394,6 +381,7 @@ done
   - FootOnsat - Informacion de eventos deportivos
   - epgmhw2 - Epg desde canal portada
   - xstreamity - Para instalar listas iptv
+  - junglem3utobouquet - Para crearte favoritos enigma2 desde una lista m3u o favorito icam
   - JungleScript Tools - Plugin interfaz grafica junglescript          
 EOF
     temporizador
@@ -407,6 +395,24 @@ EOF
     init 4 &
 
  }
+ 
+#Definimos la instalacion del repositorio jungle-team
+function junglefeed() {
+    if [ -f "/etc/opkg/jungle-feed.conf" ]; then
+        echo
+	    echo -e "${RED_BOLD}⚠️  El archivo jungle-feed.conf ya existe en /etc/opkg/ - no se requiere la descarga.${RESET}"
+	    echo     
+        return
+    fi
+    echo "Realizando instalacion de repositorio Jungle-Team"
+    echo
+    wget $REPOSITORIO_JUNGLE -P /etc/opkg/ >>$SPEEDY_LOG 2>&1 | progress_bar 3
+    echo
+    echo "Instalado repositorio Jungle-Team"
+    echo "---------------------------------------------------------"
+    echo
+}
+
 
 #funcion menu borrar logo speedy OEA
 function borrar_log() {
@@ -702,7 +708,7 @@ function logo(){
 	echo -e "\e[32m${VERDE} *        																	 *\e[0m"
 	echo -e "\e[32m${VERDE} *                          SPEEDY OEA-Openspa             					 *\e[0m"
 	echo -e "\e[32m${VERDE} *      grupo telegram: https://t.me/joinchat/AFo2KEfzM5Tk7y3VgcqIOA          *\e[0m"
-	echo -e "\e[32m${VERDE} *                            VERSION 1.3                                     *\e[0m"
+	echo -e "\e[32m${VERDE} *                            VERSION 1.4                                     *\e[0m"
 	echo -e "\e[32m${VERDE} *                           jungle-team.com                                  *\e[0m"
 	echo -e "\e[32m${VERDE} ******************************************************************************\e[0m"
 }
@@ -711,6 +717,7 @@ function install_packages() {
  CompruebaInternet
  Menu_start_install
  hora
+ junglefeed
  update
 #Se ejecuta instalacion de paquetes propios de Openspa
  Modulo_package_gestion "$PAQUETE_EPGIMPORT" "🧐  Opciones Solicitud de instalacion EPGIMPORT" "$INSTALACION_NORMAL" "5"
@@ -732,32 +739,35 @@ function install_packages() {
  Modulo_package_gestion "enigma2-plugin-extensions-panelextra" "🧐  Opciones Solicitud de instalacion Panel Extra Openspa" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-plutotv" "🧐  Opciones Solicitud de instalacion Pluto TV" "$INSTALACION_NORMAL" "5"
 #Se ejecuta instalacion de paquetes de jungle-team
- Modulo_package_gestion "$PAQUETE_OSCAMCONCLAVE" "🧐  Opciones Solicitud de instalacion Oscam Conclave" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_INSTALAR_OP_OSCAMCONCLAVE"
- Modulo_package_gestion "enigma2-plugin-softcams-cccam" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 spain" "$INSTALACION_NORMAL" "5" "extra_comando" "install_cccam_openspa" "extra_comando2" "$COMANDO_CCCAM"
+ Modulo_package_gestion "$PAQUETE_OSCAMCONCLAVE" "🧐  Opciones Solicitud de instalacion Oscam Conclave" "$INSTALACION_FORZADA" "10"
+ Modulo_package_gestion "enigma2-plugin-softcams-cccam" "🧐  Opciones Solicitud de instalacion CCcam 2.3.2 64 bits spain" "$INSTALACION_NORMAL" "5" "extra_comando" "install_cccam_openspa" "extra_comando2" "$COMANDO_CCCAM"
  if [ "$es_arm" -gt 0 ];
  then
-	 Modulo_package_gestion "$PAQUETE_GHOSTREAMY_ARM" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_INSTALAR_OP_GHOSTREAMY_ARM"
+	 Modulo_package_gestion "$PAQUETE_GHOSTREAMY_ARM" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10"
  else
-     Modulo_package_gestion "$PAQUETE_GHOSTREAMY_MIPSEL" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_INSTALAR_OP_GHOSTREAMY_MIPS"
+     Modulo_package_gestion "$PAQUETE_GHOSTREAMY_MIPSEL" "🧐  Opciones Solicitud de instalacion Ghostreamy" "$INSTALACION_FORZADA" "10"
  fi
- Modulo_package_gestion "$PAQUETE_JUNGLEBOT" "🧐  Opciones Solicitud de instalacion Junglebot" "$INSTALACION_FORZADA" "45" "extra_comando" "$COMANDO_INSTALAR_OP_JUNGLEBOT" "extra_comando2" "$COMANDO_JUNGLEBOT"
- Modulo_package_gestion "$PAQUETE_TDTCHANNLES" "🧐  Opciones Solicitud de instalacion TdtChannels" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_INSTALAR_OP_TDTCHANNELS"
- Modulo_package_gestion "$PAQUETE_JUNGLESCRIPT" "🧐  Opciones Solicitud de instalacion JungleScript" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_INSTALAR_OP_JUNGLESCRIPT" "extra_comando2" "$COMANDO_JUNGLESCRIPT"
+ Modulo_package_gestion "$PAQUETE_JUNGLEBOT" "🧐  Opciones Solicitud de instalacion Junglebot" "$INSTALACION_FORZADA" "45" "extra_comando" "$COMANDO_JUNGLEBOT"
+ Modulo_package_gestion "$PAQUETE_TDTCHANNLES" "🧐  Opciones Solicitud de instalacion TdtChannels" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "enigma2-plugin-extensions-junglem3utobouquet" "🧐  Opciones Solicitud de instalacion junglem3utobouquet" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "$PAQUETE_JUNGLESCRIPT" "🧐  Opciones Solicitud de instalacion JungleScript" "$INSTALACION_FORZADA" "10" "extra_comando" "$COMANDO_JUNGLESCRIPT"
  if [ "$es_arm" -gt 0 ];
  then
-     Modulo_package_gestion "enigma2-plugin-extensions-movistarepgdownload-arm" "🧐  Opciones Solicitud de instalacion movistarepgdownload" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_INSTALAR_OP_MHW_ARM"
+     Modulo_package_gestion "enigma2-plugin-extensions-movistarepgdownload-arm" "🧐  Opciones Solicitud de instalacion movistarepgdownload" "$INSTALACION_NORMAL" "5"
  else
-     Modulo_package_gestion "enigma2-plugin-extensions-movistarepgdownload-mipsel" "🧐  Opciones Solicitud de instalacion movistarepgdownload-arm" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_INSTALAR_OP_MHW_MIPS"
+     Modulo_package_gestion "enigma2-plugin-extensions-movistarepgdownload-mipsel" "🧐  Opciones Solicitud de instalacion movistarepgdownload-arm" "$INSTALACION_NORMAL" "5"
  fi
  if [ "$es_arm" -gt 0 ];
  then
-     Modulo_package_gestion "sendunicable" "🧐  Opciones Solicitud de instalacion sendunicable" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_INSTALAR_OP_SEND"
+     Modulo_package_gestion "sendunicable" "🧐  Opciones Solicitud de instalacion sendunicable" "$INSTALACION_NORMAL" "5"
  else
      echo -e "${BLUE_BOLD}⚠️  No disponible para receptores mipsel${RESET}"
  fi
- Modulo_package_gestion "enigma2-plugin-extensions-junglescripttool" "🧐  Opciones Solicitud de instalacion JungleScript Tools" "$INSTALACION_FORZADA" "5" "extra_comando" "$COMANDO_INSTALAR_OP_JUNGLESCRIPTTOOLS"
+ Modulo_package_gestion "enigma2-plugin-skins-op-artkoala" "🧐  Opciones Solicitud de instalacion skin OP-Artkoala" "$INSTALACION_FORZADA" "10"
+ Modulo_package_gestion "enigma2-plugin-extensions-junglescripttool" "🧐  Opciones Solicitud de instalacion JungleScript Tools" "$INSTALACION_FORZADA" "5"
 #Instalaciones especiales
- Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5" "extra_comando" "$COMANDO_INSTALAR_OP_JUNGLEBOTLOGO"
+ Modulo_package_gestion "enigma2-plugin-extensions-footOnsat" "🧐  Opciones Solicitud de instalacion FootOnsat" "$INSTALACION_NORMAL" "5" "extra_comando" "$COMANDO_FOOTONSAT"
+ Modulo_package_gestion "enigma2-plugin-extensions-bootlogojungle" "🧐  Opciones Solicitud de instalacion Bootlogo Speedy OEA" "$FORZAR_ESCRITURA" "5"
  cambiar_password 
  init 3
  mensaje "Terminada la ejecucion de Speedy OEA Autoinstall, ahora se volvera al menu principal${GREEN}"
