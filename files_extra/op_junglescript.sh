@@ -31,6 +31,7 @@ options=(
     "Instalar Picon Version original"
     "Instalar Picon Version Color"
     "Instalar Picon Version Lunar"
+    "Instalar Picon Version Color 3D"
 )
 
 # Acciones
@@ -54,7 +55,8 @@ function JUNGLESCRIPT {
                 7) tipopicon="movistar-original" ;;
                 8) tipopicon="movistar-color" ;;
                 9) tipopicon="movistar-lunar" ;;
-            esac
+                10) tipopicon="movistar-color-3d" ;;
+            esac 
         fi
     done
 
