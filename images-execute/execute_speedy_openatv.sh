@@ -19,7 +19,7 @@ PAQUETE_GHOSTREAMY="enigma2-plugin-extensions-ghostreamy"
 
 #Defnimos comandos extra instalacion
 #COMANDO_FOOTONSAT="wget -q '--no-check-certificate' https://raw.githubusercontent.com/ziko-ZR1/FootOnsat/main/Download/install.sh && sh install.sh && rm install.sh"
-COMANDO_FOOTONSAT="wget -qO- --no-check-certificate https://gitlab.com/MOHAMED_OS/dz_store/-/raw/main/FootOnsat/online-setup -O install.sh && sh install.sh && rm install.sh"
+COMANDO_FOOTONSAT="wget -q --no-check-certificate https://gitlab.com/MOHAMED_OS/dz_store/-/raw/main/FootOnsat/online-setup -O install.sh && sh install.sh && rm install.sh"
 COMANDO_CCCAM="suerte_cccam"
 COMANDO_JUNGLESCRIPT="wget -q '--no-check-certificate' https://raw.githubusercontent.com/jungla-team/Speedy-OEA-autoinstall/main/files_extra/op_junglescript.sh && sh op_junglescript.sh && rm op_junglescript.sh"
 COMANDO_JUNGLEBOT="cambiar_parametros_junglebot"
