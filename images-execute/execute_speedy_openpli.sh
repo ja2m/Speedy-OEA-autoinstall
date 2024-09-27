@@ -3,7 +3,7 @@
 ###################  Jungle-team   ######################
 #                  jungle-team.es  ######################
 #            speedy OEA Autoinstalacion OpenPli         #
-#                    version 1.4                        #
+#                    version 1.5                        #
 ######################################################### 
 
 #Definimos paquetes mas usuales de archivos a instalar
@@ -368,11 +368,12 @@ done
   - EpgImport - Para descarga EPG con fuentes oficiales koala para Movistar+
   - Zerotier - Para acceder al receptor via vpn
   - Tdtchannels - crea favorito y picon canales tdt por web
-   - Diseqc - Para programar LNB Unicable
+  - Diseqc - Para programar LNB Unicable
   - Asignar password al receptor
   - Poner automaticamente en hora el receptor
   - Streamproxy - activar solicitud pass en streaming openwebif 
   - jedimakerxtream - Para instalar listas iptv en nuestro receptor
+  - xklass - Para instalar listas iptv
   - openvpn - Para acceder al receptor via vpn
   - FootOnsat - Informacion de eventos deportivos
   - vpn_wireguard - Para acceder via vpn 
@@ -724,6 +725,7 @@ function install_packages() {
  Modulo_package_gestion "zerotier" "🧐  Opciones Solicitud de instalacion Zerotier" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "openvpn" "🧐  Opciones Solicitud de instalacion Openvpn" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-jedimakerxtream" "🧐  Opciones Solicitud de instalacion jedimakerxtream" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "enigma2-plugin-extensions-xklass" "🧐  Opciones Solicitud de instalacion xklass" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "streamproxy" "🧐  Opciones Solicitud de instalacion streamproxy" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-xstreamity" "🧐  Opciones Solicitud de instalacion xstreamity" "$INSTALACION_NORMAL" "5"
 #Se ejecuta instalacion de paquetes de jungle-team
@@ -768,64 +770,67 @@ function remove() {
     temporizador
     echo
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_EPGIMPORT)" ]; then
-        echo "Desinstalando Epgimport"; echo; $BORRAR_PAQUETE $PAQUETE_EPGIMPORT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Epgimport Desistalado"
+        echo "Desinstalando Epgimport"; echo; $BORRAR_PAQUETE $PAQUETE_EPGIMPORT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Epgimport Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_JUNGLESCRIPT)" ]; then
-        echo "Desinstalando Junglescript"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLESCRIPT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 JungleScript Desistalado"
+        echo "Desinstalando Junglescript"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLESCRIPT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 JungleScript Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_JUNGLEBOT)" ]; then
-        echo "Desinstalando Jungleblot"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLEBOT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Junglebot Desistalado"
+        echo "Desinstalando Jungleblot"; echo; $BORRAR_PAQUETE $PAQUETE_JUNGLEBOT >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Junglebot Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_ARM)" ]; then
-        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_ARM >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_ARM >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL)" ]; then
-        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desistalado"
+        echo "Desinstalando Ghostreamy"; echo; $BORRAR_PAQUETE $PAQUETE_GHOSTREAMY_MIPSEL >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Ghostreamy Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_OSCAMCONCLAVE)" ]; then
-        echo "Desinstalando Oscam Conclave"; echo; $BORRAR_PAQUETE $PAQUETE_OSCAMCONCLAVE >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 OscamConclave Desistalado"
+        echo "Desinstalando Oscam Conclave"; echo; $BORRAR_PAQUETE $PAQUETE_OSCAMCONCLAVE >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 OscamConclave Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE $PAQUETE_TDTCHANNLES)" ]; then
-        echo "Desinstalando TdtChannels"; echo; $BORRAR_PAQUETE $PAQUETE_TDTCHANNLES >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 TdtChannels Desistalado"
+        echo "Desinstalando TdtChannels"; echo; $BORRAR_PAQUETE $PAQUETE_TDTCHANNLES >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 TdtChannels Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-ncam)" ]; then
-        echo "Desinstalando Oscam ncam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-ncam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam ncam Desistalado"
+        echo "Desinstalando Oscam ncam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-ncam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 Oscam ncam Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE zerotier)" ]; then
-        echo "Desinstalando zerotier"; echo; $BORRAR_PAQUETE zerotier >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 zerotier Desistalado"
+        echo "Desinstalando zerotier"; echo; $BORRAR_PAQUETE zerotier >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 zerotier Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE openvpn)" ]; then
-        echo "Desinstalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desistalado"
+        echo "Desinstalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jedimakerxtream)" ]; then
-        echo "Desinstalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desistalado"
+        echo "Desinstalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desinstalado"
+    fi
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-xklass)" ]; then
+        echo "Desinstalando xklass"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xklass >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xklass Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE streamproxy)" ]; then
-        echo "Desinstalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desistalado"
+        echo "Desinstalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-xstreamity)" ]; then
-        echo "Desinstalando xstreamity"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xstreamity >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xstreamity Desistalado"
+        echo "Desinstalando xstreamity"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xstreamity >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xstreamity Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm)" ]; then
-        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
+        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel)" ]; then
-        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desistalado"
+        echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-mipsel >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE sendunicable)" ]; then
-        echo "Desinstalando sendunicable"; echo; $BORRAR_PAQUETE sendunicable >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 sendunicable Desistalado"
+        echo "Desinstalando sendunicable"; echo; $BORRAR_PAQUETE sendunicable >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 sendunicable Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-junglescripttool)" ]; then
-        echo "Desinstalando junglescripttool"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglescripttool >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglescripttool Desistalado"
+        echo "Desinstalando junglescripttool"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglescripttool >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglescripttool Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-footOnsat)" ]; then
-        echo "Desinstalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desistalado"
+        echo "Desinstalando footOnsat"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-footOnsat >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 footOnsat Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-softcams-cccam)" ]; then
-        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desistalado"
+        echo "Desinstalando CCcam"; echo; $BORRAR_PAQUETE enigma2-plugin-softcams-cccam >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 CCcam Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-junglem3utobouquet)" ]; then
-        echo "Desinstalando junglem3utobouquet"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglem3utobouquet >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglem3utobouquet Desistalado"
+        echo "Desinstalando junglem3utobouquet"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-junglem3utobouquet >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 junglem3utobouquet Desinstalado"
     fi                                                                                                                                                                                                                            
     echo
     echo "----Espere, dentro de 5 segundos se volvera al menu principal-----"
