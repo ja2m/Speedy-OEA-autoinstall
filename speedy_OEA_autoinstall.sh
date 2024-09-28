@@ -1,8 +1,8 @@
 #!/bin/bash
 # Provides: jungle-team
 # Description: Speedy OEA autoinstall, instalacioon complemenetos.
-# Version: 1.4
-# Date: 13/05/2023
+# Version: 1.5
+# Date: 28/09/2024
 
 # Definimos variables de colores
 GREEN="\e[32m"
