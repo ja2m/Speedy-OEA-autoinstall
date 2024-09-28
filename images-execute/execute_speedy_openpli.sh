@@ -372,14 +372,13 @@ done
   - Asignar password al receptor
   - Poner automaticamente en hora el receptor
   - Streamproxy - activar solicitud pass en streaming openwebif 
-  - jedimakerxtream - Para instalar listas iptv en nuestro receptor
+  - bouquetmakerxtream - Para instalar listas iptv en nuestro receptor
   - xklass - Para instalar listas iptv
   - openvpn - Para acceder al receptor via vpn
   - FootOnsat - Informacion de eventos deportivos
   - vpn_wireguard - Para acceder via vpn 
   - junglem3utobouquet - Para crearte favoritos enigma2 desde una lista m3u o favorito icam
   - epgmhw2 - Epg desde canal portada
-  - xstreamity - Para instalar listas iptv
   - JungleScript Tools - Plugin interfaz grafica junglescript          
 EOF
     temporizador
@@ -724,10 +723,9 @@ function install_packages() {
  cambiar_arranque_emus
  Modulo_package_gestion "zerotier" "🧐  Opciones Solicitud de instalacion Zerotier" "$INSTALACION_FORZADA" "5"
  Modulo_package_gestion "openvpn" "🧐  Opciones Solicitud de instalacion Openvpn" "$INSTALACION_NORMAL" "5"
- Modulo_package_gestion "enigma2-plugin-extensions-jedimakerxtream" "🧐  Opciones Solicitud de instalacion jedimakerxtream" "$INSTALACION_NORMAL" "5"
+ Modulo_package_gestion "enigma2-plugin-extensions-bouquetmakerxtream" "🧐  Opciones Solicitud de instalacion bouquetmakerxtream" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "enigma2-plugin-extensions-xklass" "🧐  Opciones Solicitud de instalacion xklass" "$INSTALACION_NORMAL" "5"
  Modulo_package_gestion "streamproxy" "🧐  Opciones Solicitud de instalacion streamproxy" "$INSTALACION_NORMAL" "5"
- Modulo_package_gestion "enigma2-plugin-extensions-xstreamity" "🧐  Opciones Solicitud de instalacion xstreamity" "$INSTALACION_NORMAL" "5"
 #Se ejecuta instalacion de paquetes de jungle-team
  Modulo_package_gestion "$PAQUETE_OSCAMCONCLAVE" "🧐  Opciones Solicitud de instalacion Oscam Conclave" "$INSTALACION_FORZADA" "10"
  if [ "$es_arm" -gt 0 ];
@@ -799,17 +797,14 @@ function remove() {
     if [ -n "$($ESTATUS_PAQUETE openvpn)" ]; then
         echo "Desinstalando openvpn"; echo; $BORRAR_PAQUETE openvpn >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 openvpn Desinstalado"
     fi
-    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-jedimakerxtream)" ]; then
-        echo "Desinstalando jedimakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-jedimakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 jedimakerxtream Desinstalado"
+    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-bouquetmakerxtream)" ]; then
+        echo "Desinstalando bouquetmakerxtream"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-bouquetmakerxtream >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 bouquetmakerxtream Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-xklass)" ]; then
         echo "Desinstalando xklass"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xklass >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xklass Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE streamproxy)" ]; then
         echo "Desinstalando streamproxy"; echo; $BORRAR_PAQUETE streamproxy >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 streamproxy Desinstalado"
-    fi
-    if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-xstreamity)" ]; then
-        echo "Desinstalando xstreamity"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-xstreamity >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 xstreamity Desinstalado"
     fi
     if [ -n "$($ESTATUS_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm)" ]; then
         echo "Desinstalando movistarepgdownload"; echo; $BORRAR_PAQUETE enigma2-plugin-extensions-movistarepgdownload-arm >>$SPEEDY_LOG 2>&1 | progress_bar 5; echo "👍 movistarepgdownload Desinstalado"
