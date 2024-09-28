@@ -1,6 +1,6 @@
 ![logo speedy](https://jungle-team.com/wp-content/uploads/2023/03/speedy_logo.png)
 
-[![speedy version](https://jungle-team.com/wp-content/uploads/2023/04/releases1_3.png)](https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/) [   ![Licencia speedy](https://jungle-team.com/wp-content/uploads/2023/03/licence.png)
+[![speedy version](1.5)](https://jungle-team.com/speedy-oea-autoinstall-andale-andale-andale-yiiija/) [   ![Licencia speedy](https://jungle-team.com/wp-content/uploads/2023/03/licence.png)
 ](https://github.com/jungla-team/Speedy-OEA-autoinstall/blob/main/LICENSE) [![chat telegram](https://jungle-team.com/wp-content/uploads/2023/03/telegram.png)
 ](https://t.me/joinchat/R_MzlCWf4Kahgb5G) [![donar a jungle](https://jungle-team.com/wp-content/uploads/2023/03/donate.png)
 ](https://paypal.me/jungleteam)
